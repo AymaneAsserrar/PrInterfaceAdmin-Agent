@@ -19,6 +19,7 @@ class MonitorTask:
         """
         self.interval = 3
         self.num_cores = psutil.cpu_count(logical=False)
+        self.cpu_percent = [0] * self.num_cores
 
     def monitor(self):
         """Continuously monitor and store the result in an attribute."""
