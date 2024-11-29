@@ -15,6 +15,8 @@ class MonitorTaskFake(MonitorTask):
     interval: int = 0
     cpu_percent: list[float] = ["10", "12"]
     num_cores: int = 3
+    def __init__(self):
+        None
 
     def monitor(self):
         pass
@@ -36,6 +38,7 @@ def test_get_cpu_usage():
     # use fake monitor to have deterministic values
     app.state.monitortask = MonitorTaskFake()
     response = client.get("/metrics/v1/cpu/usage")
+    print(app.state.monitortask.cpu_percent)
     assert response.status_code == 200
     assert response.json() == [{"id": 0, "usage": "10"}, {"id": 1, "usage": "12"}]
     # restore monitortask for next test
