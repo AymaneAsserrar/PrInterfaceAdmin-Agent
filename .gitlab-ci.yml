@@ -16,9 +16,8 @@ compile:
 test:
   stage: test
   script:
-  test_health()
-  test_get_cpu_usage()
-  test_get_ram_usage()
+  - pip install -r requirements.dev.txt
+  - make test
 
 # Step below are not useful for the moment
 
