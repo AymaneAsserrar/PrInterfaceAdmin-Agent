@@ -26,6 +26,10 @@ class MonitorTask:
         self.cpu_percent = [0] * self.num_cores
         self.ram_percent = 0
         self._update_ram_metrics()
+        self.total_ram = 0.
+        self.used_ram = 0.
+        self.available_ram = 0.
+        self.free_ram = 0.
 
     def _update_ram_metrics(self):
         """Update RAM-related metrics."""
