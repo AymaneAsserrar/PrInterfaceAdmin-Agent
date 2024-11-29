@@ -15,7 +15,7 @@ class MonitorTaskFake(MonitorTask):
     interval: int = 0
     cpu_percent: list[float] = ["10", "12"]
     num_cores: int = 3
-    def __init__(self):
+    def __init__(self): 
         None
 
     def monitor(self):
