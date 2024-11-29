@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.metrics.v1.cpu import cpu_v1_router
+from api.metrics.v1.cpu import cpu_router as cpu_v1_router
 from api.metrics.v1.ram import ram_router as ram_v1_router
 
 router = APIRouter()
