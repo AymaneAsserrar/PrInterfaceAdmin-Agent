@@ -14,7 +14,12 @@ class MonitorTaskFake(MonitorTask):
     """
     interval: int = 0
     cpu_percent: list[float] = ["10", "12"]
+    total_ram = 4000.
+    available_ram = 3000.
+    used_ram = 1000.
+    free_ram = 3000.      
     num_cores: int = 3
+
     def __init__(self): 
         None
 
@@ -45,8 +50,16 @@ def test_get_cpu_usage():
     app.state.monitortask = save_app
 
 
-def test_get_cpu_core():
-    response = client.get("/metrics/v1/cpu/core")
-    # we can test types but not values because they will change at each test.
+
+
+
+def test_get_ram_usage():
+    # backup of the existing monitortask to restore it after the test
+    save_app = app.state.monitortask
+    # use fake monitor to have deterministic values
+    app.state.monitortask = MonitorTaskFake()
+    response = client.get("/metrics/v1/ram/info")
     assert response.status_code == 200
-    assert isinstance(response.json()["number"], int)
+    assert response.json() == {"total" : 4000., "available": 3000. , "used": 1000., "free": 3000.}
+    # restore monitortask for next test
+    app.state.monitortask = save_app
