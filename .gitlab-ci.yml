@@ -1,5 +1,5 @@
 
-image: python:3.8-alpine
+image: python:3.12-alpine
 
 stages:
   - compile
