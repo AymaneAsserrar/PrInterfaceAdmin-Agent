@@ -18,6 +18,8 @@ test:
   script:
   - apk add --no-cache gcc python3-dev musl-dev linux-headers
   - pip install -r requirements.dev.txt
+  - apk add --no-cache make
+  - make environment
   - make test
 
 # Step below are not useful for the moment
