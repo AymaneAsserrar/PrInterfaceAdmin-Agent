@@ -14,7 +14,7 @@ class MonitorTaskFake(MonitorTask):
     and make deterministic test (deterministic = repeatable and known values)
     """
     interval: int = 0
-    cpu_percent: list[float] = ["10", "12"]
+    cpu_percent: List[float] = ["10", "12"]
     total_ram = 4000.
     available_ram = 3000.
     used_ram = 1000.
