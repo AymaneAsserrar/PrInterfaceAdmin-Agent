@@ -3,6 +3,7 @@ import threading
 from fastapi.testclient import TestClient
 from server import app
 from monitor import MonitorTask
+from typing import List
 
 
 class MonitorTaskFake(MonitorTask):

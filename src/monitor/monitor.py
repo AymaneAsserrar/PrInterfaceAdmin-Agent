@@ -1,6 +1,7 @@
 """This module defines a `MonitorTask` class for monitoring metrics on a host."""
 import time
 import psutil
+from typing import List
 
 
 class MonitorTask:
