@@ -1,5 +1,4 @@
 stages:
-  - debug
   - test
 #  - lint
 #  - coverage
@@ -8,18 +7,10 @@ stages:
 default:
   image: python:3.12-alpine
 
-compile:
-  stage: debug
-  script:
-  - echo "Starting debug"
-  - apk add --no-cache gcc python3-dev musl-dev linux-headers make
-  - pip install -r requirements.dev.txt
-  - apk add --no-cache make
-  - make environment
-  - make debug
 test:
   stage: test
   script:
+  - echo "Starting test..."
   - apk add --no-cache gcc python3-dev musl-dev linux-headers make
   - pip install -r requirements.dev.txt
   - apk add --no-cache make
