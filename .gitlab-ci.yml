@@ -2,17 +2,18 @@
 image: python:3.12-alpine
 
 stages:
-  - compile
+  - debug
   - test
 #  - lint
 #  - coverage
 #  - deploy
 
 compile:
-  stage: compile
+  stage: debug
   script:
-  - echo "Here goes my compile command [NOT IMPLEMENTED YET]"
-
+  - echo "Starting debug"
+  - make environment
+  - make debug
 test:
   stage: test
   script:
