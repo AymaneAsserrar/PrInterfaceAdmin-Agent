@@ -1,21 +1,16 @@
-
-image: python:3.12-alpine
-
 stages:
-  - compile
   - test
 #  - lint
 #  - coverage
 #  - deploy
 
-compile:
-  stage: compile
-  script:
-  - echo "Here goes my compile command [NOT IMPLEMENTED YET]"
+default:
+  image: python:3.12-alpine
 
 test:
   stage: test
   script:
+  - echo "Starting test..."
   - apk add --no-cache gcc python3-dev musl-dev linux-headers make
   - pip install -r requirements.dev.txt
   - apk add --no-cache make
