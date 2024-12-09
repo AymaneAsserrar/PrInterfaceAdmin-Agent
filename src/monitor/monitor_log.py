@@ -14,11 +14,13 @@ def parser_ligne(ligne):
                     log_parsed['time_received_datetimeobj']]
     print( liste_value)
 
-def parser(log):
-    for ligne in log:
-        parser_ligne(ligne)
+def parser(chemin):
+    with open(chemin, 'r') as fichier:
+        for ligne in fichier:
+            
+            parser_ligne(ligne.strip())
 
 
 
 test ='127.0.0.1 - - [09/Jan/2020:10:35:48 +0000] "GET / HTTP/1.1" 200 11229 "-" "Wget/1.19.4 (linux-gnu)"'
-parser_ligne(test)
+parser("../tests/test_log.log")
