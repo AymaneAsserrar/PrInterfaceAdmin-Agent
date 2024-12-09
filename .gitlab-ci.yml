@@ -1,0 +1,45 @@
+stages:
+  - test
+#  - lint
+#  - coverage
+#  - deploy
+
+default:
+  image: python:3.12-alpine
+
+test:
+  stage: test
+  script:
+  - echo "Starting test..."
+  - apk add --no-cache gcc python3-dev musl-dev linux-headers make
+  - pip install -r requirements.dev.txt
+  - apk add --no-cache make
+  - make environment
+  - make test
+
+# Step below are not useful for the moment
+
+#staging:
+#  stage: deploy
+#  script:
+#  - echo "Deploying application on production environnement [NOT IMPLEMENTED YET]"
+#  only:
+#  - master
+
+#production:
+#  stage: deploy
+#  script:
+#  - echo "Deploying application on pre-production environnement [NOT IMPLEMENTED YET]"
+#  only:
+#  - develop
+
+#lint:
+#  stage: lint
+#  script:
+#  - echo "Checking for code quality [NOT IMPLEMENTED YET]"
+
+#coverage:
+#  stage: coverage
+#  script:
+#  - echo "Checking for code coverage level [NOT IMPLEMENTED YET]"
+

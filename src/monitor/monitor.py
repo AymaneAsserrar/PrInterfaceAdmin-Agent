@@ -1,13 +1,14 @@
 """This module defines a `MonitorTask` class for monitoring metrics on a host."""
 import time
 import psutil
+from typing import List
 
 
 class MonitorTask:
     """A class for monitoring metrics."""
 
     interval: int
-    cpu_percent: list[float]
+    cpu_percent: List[float]
     num_cores: int
     ram_percent: float
     total_ram: float
