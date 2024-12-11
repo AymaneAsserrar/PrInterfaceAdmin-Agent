@@ -1,11 +1,21 @@
 stages:
   - test
-#  - lint
+  - lint
 #  - coverage
 #  - deploy
 
 default:
   image: python:3.12-alpine
+
+lint:
+  stage: lint
+  image: python:3.10
+  before_script:
+    - pip install pylint
+  script:
+    - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
+
+
 
 test:
   stage: test
