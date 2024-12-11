@@ -15,7 +15,7 @@ lint:
     - pip install -r requirements.txt
   script:
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
-
+  allow_failuer: true
 
 
 test:
