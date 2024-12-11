@@ -12,6 +12,7 @@ lint:
   image: python:3.10
   before_script:
     - pip install pylint
+    - pip install -r requirements.txt
   script:
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
 
