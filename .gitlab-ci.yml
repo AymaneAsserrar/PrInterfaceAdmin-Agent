@@ -5,9 +5,11 @@ stages:
   - coverage
 default:
   image: python:3.12-alpine
+
 lint:
   stage: lint
   before_script:
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers jq
     - pip install pylint
     - pip install -r requirements.txt
     - apk add --no-cache gcc python3-dev musl-dev linux-headers
