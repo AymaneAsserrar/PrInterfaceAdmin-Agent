@@ -17,7 +17,9 @@ lint:
     - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py"
       -not -path "*/venv/*") | jq '.[0].score')
     - if [[ $pylint_score < 8 ]]; then echo "Lint failed, score is
-      $pylint_score"; exit 1; fi
+      $pylint_score"; exit 1; else echo "Lint passed, score is $pylint_score";
+      fi
+  allow_failure: false
 
 
 
