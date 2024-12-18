@@ -37,3 +37,4 @@ coverage:
   artifacts:
     paths: 
       - coverage.xml
+ 
