@@ -82,3 +82,31 @@ def test_parser_ligne_simple():
     # Appel de la fonction parser_ligne
     resultat = parser_ligne(log)
     assert resultat == resultat_attendu, f"Erreur : {resultat} != {resultat_attendu}"
+
+def test_parser_simple(tmp_path):
+    # Logs simulés
+    logs = [
+        '192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] "GET / HTTP/1.1" 200 1245 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"',
+        '192.168.1.11 - - [01/Jan/2020:08:15:00 +0000] "POST /login HTTP/1.1" 302 512 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"',
+        '192.168.1.12 - - [01/Jan/2020:08:18:00 +0000] "GET /notfound HTTP/1.1" 404 178 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"'
+    ]
+
+    # Créer un fichier temporaire avec les logs
+    log_file = tmp_path / "test_logs.log"
+    log_file.write_text("\n".join(logs))
+
+    # Résultat attendu
+    resultat_attendu = [
+        ['192.168.1.10', '-', '200', '/', datetime.datetime(2020, 1, 1, 8, 12, 14)],
+        ['192.168.1.11', '-', '302', '/login', datetime.datetime(2020, 1, 1, 8, 15, 0)],
+        ['192.168.1.12', '-', '404', '/notfound', datetime.datetime(2020, 1, 1, 8, 18, 0)],
+    ]
+
+    # Appeler la fonction parser et stocker les résultats
+    resultats = []
+    with open(log_file, 'r') as fichier:
+        for ligne in fichier:
+            resultats.append(parser_ligne(ligne.strip()))
+
+    # Comparer les résultats
+    assert resultats == resultat_attendu, f"Erreur : {resultats} != {resultat_attendu}"
