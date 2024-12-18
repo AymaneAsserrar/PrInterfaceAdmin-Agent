@@ -4,3 +4,4 @@ click
 pytest
 httpx
 psutil
+pytest-cov
