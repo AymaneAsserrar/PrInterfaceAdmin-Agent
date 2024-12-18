@@ -15,7 +15,7 @@ lint:
   script:
     - pylint src/ --fail-under=7.6 
   allow_failure: false
-
+ 
 
 
 test:
