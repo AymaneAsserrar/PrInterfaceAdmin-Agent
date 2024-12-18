@@ -12,14 +12,15 @@ lint:
     - apk add --no-cache gcc python3-dev musl-dev linux-headers jq
     - pip install pylint
     - pip install -r requirements.txt
-    - apk add --no-cache gcc python3-dev musl-dev linux-headers
-    - apk add --no-cache jq
   script:
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
-  after_script:
-    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py") | jq '.[0].score')
-    - lint failed under 8 if $pylint_score < 8
+    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py"
+      -not -path "*/venv/*") | jq '.[0].score')
+    - if [[ $pylint_score < 8 ]]; then echo "Lint failed, score is
+      $pylint_score"; exit 1; fi
   allow_failure: true
+
+
 
 test:
   stage: test
