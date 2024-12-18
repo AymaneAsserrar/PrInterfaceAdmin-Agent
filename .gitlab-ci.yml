@@ -1,31 +1,32 @@
+---
 stages:
- - test
- - lint
- - coverage
-# - deploy
-
+  - test
+  - lint
+  - coverage
 default:
   image: python:3.12-alpine
 
 lint:
   stage: lint
   before_script:
-   - pip install pylint
-   - pip install -r requirements.txt
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers jq
+    - pip install pylint
+    - pip install -r requirements.txt
   script:
-   - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
-  allow_failure: true
+    - pylint src/ --fail-under=7.6 
+  allow_failure: false
+ 
+ 
 
 test:
   stage: test
   script:
-   - echo "Starting test..."
-   - apk add --no-cache gcc python3-dev musl-dev linux-headers make
-   - pip install -r requirements.dev.txt
-   - apk add --no-cache make
-   - make environment
-   - make test
-
+    - echo "Starting test..."
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers make
+    - pip install -r requirements.dev.txt
+    - apk add --no-cache make
+    - make environment
+    - make test 
 coverage:
   stage: coverage
   script:
@@ -36,3 +37,4 @@ coverage:
   artifacts:
     paths: 
       - coverage.xml
+ 
