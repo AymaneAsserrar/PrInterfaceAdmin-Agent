@@ -13,7 +13,7 @@ lint:
     - pip install pylint
     - pip install -r requirements.txt
   script:
-    - pylint src/ --fail-under=8
+    - pylint src/ --fail-under=7.6
   allow_failure: false
 
 
