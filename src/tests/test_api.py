@@ -110,3 +110,20 @@ def test_parser_simple(tmp_path):
 
     # Comparer les résultats
     assert resultats == resultat_attendu, f"Erreur : {resultats} != {resultat_attendu}"
+
+def test_parser_simple_invalid(capsys, tmp_path):
+    # Logs invalides (manquent des champs importants)
+    logs_invalides = [
+        "192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] GET / HTTP/1.1",
+        "192.168.1.11 - - [01/Jan/2020:08:15:00 +0000] 302",
+        "INVALID LOG LINE"
+    ]
+
+    # Créer un fichier temporaire avec les logs invalides
+    log_file = tmp_path / "test_logs_invalid.log"
+    log_file.write_text("\n".join(logs_invalides))
+
+    # Appeler la fonction parser et vérifier qu'une exception est levée
+    with pytest.raises(Exception):
+        parser(str(log_file))
+
