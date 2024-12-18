@@ -10,7 +10,8 @@ lint:
   before_script:
     - pip install pylint
     - pip install -r requirements.txt
-    - sudo apk add gcc python3-dev musl-dev linux-headers
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers
+    - apk add --no-cache jq
   script:
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
   after_script:
