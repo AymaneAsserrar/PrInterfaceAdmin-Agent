@@ -1,12 +1,10 @@
+---
 stages:
- - test
- - lint
- - coverage
-# - deploy
-
+  - test
+  - lint
+  - coverage
 default:
   image: python:3.12-alpine
-
 lint:
   stage: lint
   before_script:
@@ -15,32 +13,28 @@ lint:
   script:
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
   after_script:
-    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py" -not -path "*/venv/*") | jq '.[0].score')
-    - if (( $(echo "$pylint_score < 8" | bc -l) )); then
-        echo "Lint score is below 8: $pylint_score";
-        exit 1;
-      fi
+    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py"
+      -not -path "*/venv/*") | jq '.[0].score')
+    - lint failed under 8 if $pylint_score < 8
   allow_failure: true
-
 test:
   stage: test
   script:
-   - echo "Starting test..."
-   - apk add --no-cache gcc python3-dev musl-dev linux-headers make
-   - pip install -r requirements.dev.txt
-   - apk add --no-cache make
-   - make environment
-   - make test
-
+    - echo "Starting test..."
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers make
+    - pip install -r requirements.dev.txt
+    - apk add --no-cache make
+    - make environment
+    - make test
 coverage:
   stage: coverage
   script:
-   - apk add --no-cache gcc python3-dev musl-dev linux-headers
-   - pip install pytest-cov
-   - pip install -r requirements.dev.txt
-   - pytest --cov=src --cov-report=xml --cov-report=term-missing
-   - coverage html
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers
+    - pip install pytest-cov
+    - pip install -r requirements.dev.txt
+    - pytest --cov=src --cov-report=xml --cov-report=term-missing
+    - coverage html
   artifacts:
-    paths: 
+    paths:
       - coverage.xml
       - htmlcov/
