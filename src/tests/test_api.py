@@ -4,6 +4,10 @@ from fastapi.testclient import TestClient
 from server import app
 from monitor import MonitorTask
 from typing import List
+import os
+import datetime
+from monitor.monitor_log import parser_ligne, parser
+import pytest
 
 
 class MonitorTaskFake(MonitorTask):
@@ -51,9 +55,6 @@ def test_get_cpu_usage():
     app.state.monitortask = save_app
 
 
-
-
-
 def test_get_ram_usage():
     # backup of the existing monitortask to restore it after the test
     save_app = app.state.monitortask
@@ -64,3 +65,20 @@ def test_get_ram_usage():
     assert response.json() == {"total" : 4000., "available": 3000. , "used": 1000., "free": 3000.}
     # restore monitortask for next test
     app.state.monitortask = save_app
+
+def test_parser_ligne():
+    # Log simulé
+    log = '192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] "GET / HTTP/1.1" 200 1245 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"'
+
+    # Résultat attendu
+    resultat_attendu = [
+        '192.168.1.10',  # remote_host
+        '-',             # remote_user
+        '200',           # status
+        '/',             # request_url
+        datetime.datetime(2020, 1, 1, 8, 12, 14)  # time_received_datetimeobj
+    ]
+
+    # Appel de la fonction parser_ligne
+    resultat = parser_ligne(log)
+    assert resultat == resultat_attendu, f"Erreur : {resultat} != {resultat_attendu}"

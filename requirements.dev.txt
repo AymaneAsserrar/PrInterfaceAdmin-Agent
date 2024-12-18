@@ -5,3 +5,4 @@ pytest
 httpx
 psutil
 pytest-cov
+apache_log_parser
