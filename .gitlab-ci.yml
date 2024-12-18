@@ -36,4 +36,3 @@ coverage:
   artifacts:
     paths: 
       - coverage.xml
-      - htmlcov/
