@@ -18,7 +18,6 @@ lint:
       -not -path "*/venv/*") | jq '.[0].score')
     - if [[ $pylint_score < 8 ]]; then echo "Lint failed, score is
       $pylint_score"; exit 1; fi
-  allow_failure: true
 
 
 
