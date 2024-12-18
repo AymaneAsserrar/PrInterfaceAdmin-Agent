@@ -5,18 +5,19 @@ stages:
   - coverage
 default:
   image: python:3.12-alpine
-
 lint:
   stage: lint
   before_script:
     - pip install pylint
     - pip install -r requirements.txt
+    - sudo apk add gcc python3-dev musl-dev linux-headers
   script:
-    - apk add gcc python3-dev musl-dev linux-headers
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
-
+  after_script:
+    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py"
+      -not -path "*/venv/*") | jq '.[0].score')
+    - lint failed under 8 if $pylint_score < 8
   allow_failure: true
-
 
 test:
   stage: test
@@ -27,7 +28,6 @@ test:
     - apk add --no-cache make
     - make environment
     - make test
-
 coverage:
   stage: coverage
   script:
