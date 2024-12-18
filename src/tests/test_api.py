@@ -1,10 +1,9 @@
-"""This module defines an exemple of test"""
 import threading
+import os
 from fastapi.testclient import TestClient
 from server import app
 from monitor import MonitorTask
 from typing import List
-import os
 import datetime
 from monitor.monitor_log import parser_ligne, parser
 import pytest
@@ -55,6 +54,7 @@ def test_get_cpu_usage():
     app.state.monitortask = save_app
 
 
+
 def test_get_ram_usage():
     # backup of the existing monitortask to restore it after the test
     save_app = app.state.monitortask
@@ -66,7 +66,7 @@ def test_get_ram_usage():
     # restore monitortask for next test
     app.state.monitortask = save_app
 
-def test_parser_ligne():
+def test_parser_ligne_simple():
     # Log simulé
     log = '192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] "GET / HTTP/1.1" 200 1245 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"'
 
