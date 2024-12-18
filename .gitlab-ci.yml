@@ -17,9 +17,9 @@ lint:
   script:
     - pylint $(find . -type f -name "*.py" -not -path "*/venv/*")
   after_script:
-    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py"
-      -not -path "*/venv/*") | jq '.[0].score')
-    - lint failed under 8 if $pylint_score < 8
+    - pylint_score=$(pylint --output-format=json $(find . -type f -name "*.py" -not -path "*/venv/*") | jq '.[0].score')
+    - echo "Pylint score: $pylint_score"
+    - lint failed under 8 if [ $pylint_score -lt 8 ]
   allow_failure: true
 
 test:
