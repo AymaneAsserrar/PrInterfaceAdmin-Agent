@@ -16,27 +16,27 @@ class MonitorTask:
     used_ram: float
     free_ram: float
 
+
+
+
     def __init__(self) -> None:
-        """
-        Initialize the MonitorTask class.
-        Add initialization tasks here like checks
-        The monitoring interval is 3 seconds.
-        """
+        """Initialize the MonitorTask class."""
         self.interval = 3
         self.num_cores = psutil.cpu_count(logical=False)
         self.cpu_percent = [0] * self.num_cores
         self.ram_percent = 0
-        self._update_ram_metrics()
-        self.total_ram = 0.
-        self.used_ram = 0.
-        self.available_ram = 0.
-        self.free_ram = 0.
+        # Initialiser les valeurs RAM directement lors de l'initialisation
+        ram = psutil.virtual_memory()
+        self.total_ram = ram.total / (1024 * 1024)
+        self.available_ram = ram.available / (1024 * 1024)
+        self.used_ram = ram.used / (1024 * 1024)
+        self.free_ram = ram.free / (1024 * 1024)
 
     def _update_ram_metrics(self):
         """Update RAM-related metrics."""
         ram = psutil.virtual_memory()
         self.ram_percent = ram.percent
-        self.total_ram = ram.total / (1024 * 1024)  # Convert to MB
+        self.total_ram = ram.total / (1024 * 1024)
         self.available_ram = ram.available / (1024 * 1024)
         self.used_ram = ram.used / (1024 * 1024)
         self.free_ram = ram.free / (1024 * 1024)
@@ -47,6 +47,3 @@ class MonitorTask:
             self.cpu_percent = psutil.cpu_percent(percpu=True)
             self._update_ram_metrics()
             time.sleep(self.interval)
-
-    def __str__(self) -> str:
-        return f"MonitorTask(interval = {self.interval})"
