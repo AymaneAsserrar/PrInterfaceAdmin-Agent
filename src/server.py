@@ -4,7 +4,6 @@ This module contains a FastAPI application with various routes and middleware.
 It initializes the FastAPI app, sets up routers, event listeners, and exception handlers, and
 creates a monitoring thread for fetching metrics.
 """
-import threading
 from typing import List
 from fastapi import FastAPI, Request
 from fastapi.middleware import Middleware
