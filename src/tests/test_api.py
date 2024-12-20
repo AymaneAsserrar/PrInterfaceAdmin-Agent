@@ -55,17 +55,30 @@ def test_get_cpu_usage():
 
 
 
-def test_get_ram_usage():
+def test_get_ram_info():
     # backup of the existing monitortask to restore it after the test
     save_app = app.state.monitortask
-    # use fake monitor to have deterministic values
-    app.state.monitortask = MonitorTaskFake()
-    response = client.get("/metrics/v1/ram/info")
-    assert response.status_code == 200
-    assert response.json() == {"total" : 4000., "available": 3000. , "used": 1000., "free": 3000.}
-    # restore monitortask for next test
-    app.state.monitortask = save_app
-
+    try:
+        print("Starting RAM info test...")
+        # use fake monitor to have deterministic values
+        app.state.monitortask = MonitorTaskFake()
+        
+        response = client.get("/metrics/v1/ram/info")
+        print("Response from RAM endpoint:", response.json())
+        
+        assert response.status_code == 200
+        assert response.json() == {
+            "total": 4000.0,
+            "available": 3000.0,
+            "used": 1000.0,
+            "free": 3000.0
+        }
+    except Exception as e:
+        print(f"Test failed with error: {str(e)}")
+        raise
+    finally:
+        # restore monitortask for next test
+        app.state.monitortask = save_app
 def test_parser_ligne_simple():
     # Log simulé
     log = '192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] "GET / HTTP/1.1" 200 1245 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"'
