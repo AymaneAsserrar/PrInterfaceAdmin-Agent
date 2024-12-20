@@ -26,7 +26,6 @@ test:
     - pip install -r requirements.dev.txt
     - apk add --no-cache make
     - make environment
-    - python -c "import psutil; print('System RAM:', psutil.virtual_memory())"
     - make test 
     allow_failure: false
   
