@@ -22,11 +22,14 @@ test:
   stage: test
   script:
     - echo "Starting test..."
-    - apk add --no-cache gcc python3-dev musl-dev linux-headers make
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers make procps
     - pip install -r requirements.dev.txt
     - apk add --no-cache make
     - make environment
+    - python -c "import psutil; print('System RAM:', psutil.virtual_memory())"
     - make test 
+    allow_failure: false
+  
 coverage:
   stage: coverage
   script:
