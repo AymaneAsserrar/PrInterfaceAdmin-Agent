@@ -22,12 +22,12 @@ test:
   stage: test
   script:
     - echo "Starting test..."
-    - apk add --no-cache gcc python3-dev musl-dev linux-headers make procps
+    - apk add --no-cache gcc python3-dev musl-dev linux-headers make 
     - pip install -r requirements.dev.txt
     - apk add --no-cache make
     - make environment
     - make test 
-    allow_failure: false
+
   
 coverage:
   stage: coverage
