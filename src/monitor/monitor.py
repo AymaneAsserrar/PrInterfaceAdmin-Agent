@@ -7,18 +7,6 @@ from typing import List
 class MonitorTask:
     """A class for monitoring metrics."""
 
-    interval: int
-    cpu_percent: List[float]
-    num_cores: int
-    ram_percent: float
-    total_ram: float
-    available_ram: float
-    used_ram: float
-    free_ram: float
-
-
-
-
     def __init__(self) -> None:
         """Initialize the MonitorTask class."""
         self.interval = 3
