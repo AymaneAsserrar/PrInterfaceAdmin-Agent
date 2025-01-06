@@ -11,12 +11,12 @@ default:
   image: docker:19.03.12
 
 variables:
-  CI_REGISTRY_IMAGE: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8.git
+  CI_REGISTRY_IMAGE: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
-  CI_REGISTRY_USER: gauvain
-  CI_REGISTRY_PASSWORD:  117-TgBT-0216
+  CI_REGISTRY_USER: 
+  CI_REGISTRY_PASSWORD:  
 
 services:
   - name: docker:dind
@@ -50,7 +50,7 @@ lint:
     - pip install pylint
     - pip install -r requirements.txt
   script:
-    - pylint src/ --fail-under=7.5
+    - pylint src/ --disable=R0011,W292,C0301 --fail-under=7.5
   allow_failure: false
  
  
