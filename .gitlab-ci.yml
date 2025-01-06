@@ -3,8 +3,45 @@ stages:
   - test
   - lint
   - coverage
+  - build
+  - test 
+  - deploy
+
 default:
-  image: python:3.12-alpine
+  image: docker:19.03.12
+
+variables:
+  CI_REGISTRY_IMAGE: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8.git
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  CI_REGISTRY_USER: gauvain
+  CI_REGISTRY_PASSWORD:  117-TgBT-0216
+
+services:
+  - name: docker:dind
+    entrypoint: ["env", "-u", "DOCKER_HOST"]
+    command: ["dockerd-entrypoint.sh"]
+
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE"
+    - docker push "$CI_REGISTRY_IMAGE"
+
+deploy:
+  stage: deploy
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE:main"
+    - docker run -d --name project-container -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
+  only:
+    - main
+
+
 
 lint:
   stage: lint
@@ -13,7 +50,7 @@ lint:
     - pip install pylint
     - pip install -r requirements.txt
   script:
-    - pylint src/ --disable=R0011,W292,C0301 --fail-under=7.8
+    - pylint src/ --fail-under=7.5
   allow_failure: false
  
  
