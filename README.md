@@ -33,4 +33,4 @@ Run project with `make debug` and consult url in log for api doc at `/docs` or `
 
 Application is running 2 threads, one for the API to expose metrics and one for collecting metrics.
 ## Badges
-![Coverage](https://gitlab.com/PrInterfaceAdmin/2024-25/group8/IA Groupe 8/badges/add-badges/coverage.svg)
+![Coverage](https://gitlab.com/PrInterfaceAdmin/2024-25/group8/IA%20Groupe%208/badges/add-badges/coverage.svg)
