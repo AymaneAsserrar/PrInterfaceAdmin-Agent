@@ -1,5 +1,7 @@
 pylint 
 pytest
+httpx
+psutil
 pytest-cov
 coverage
 flake8
