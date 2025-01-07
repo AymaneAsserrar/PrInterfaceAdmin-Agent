@@ -1,5 +1,4 @@
-fastapi
 uvicorn
 click
 psutil
-pytest
+apache_log_parser
