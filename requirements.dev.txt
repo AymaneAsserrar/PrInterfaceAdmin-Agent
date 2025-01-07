@@ -4,5 +4,3 @@ pytest-cov
 coverage
 flake8
 fastapi
-monitor
-typing
