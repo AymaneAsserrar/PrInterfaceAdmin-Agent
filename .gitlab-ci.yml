@@ -23,11 +23,12 @@ test:
     - echo "Starting test..."
     - apk add --no-cache gcc python3-dev musl-dev linux-headers make 
     - pip install -r requirements.dev.txt
+    - pip install -r requirements.txt
     - apk add --no-cache make
     - make environment
     - make test 
 
-  
+
 coverage:
   stage: coverage
   script:
