@@ -32,3 +32,5 @@ prod : no hot reload
 Run project with `make debug` and consult url in log for api doc at `/docs` or `/redoc`.
 
 Application is running 2 threads, one for the API to expose metrics and one for collecting metrics.
+## Badges
+![Coverage](https://img.shields.io/gitlab/coverage/PrInterfaceAdmin/2024-25/group8/ia-groupe-8/add-badges?style=flat-square)
