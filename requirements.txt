@@ -1,14 +1,10 @@
-fastapi
 uvicorn
 click
 psutil
 core
-monitor
 contextlib
 pytest-cov
 apache-log-parser
-server
-typing
 pytest
 datetime
 monitor.monitor_log
