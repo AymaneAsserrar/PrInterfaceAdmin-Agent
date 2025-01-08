@@ -2,17 +2,14 @@ stages:
   - test
   - lint
   - coverage
-  - build
+  - build 
   - deploy
 
-default:
-  image: python:3.12-alpine  # Utilisation de l'image Python par défaut
 
-before_script:
-  # Préparation générale, y compris la mise à jour de pip
-  - python3 -m ensurepip  # Installe pip si ce n'est pas déjà fait
-  - python3 -m pip install --upgrade pip  # Met à jour pip
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+default:
+  image: python:3.12-alpine
+
+
 
 lint:
   stage: lint
@@ -23,29 +20,36 @@ lint:
   script:
     - pylint src/ --disable=R0011,W292,C0301 --fail-under=7.5
   allow_failure: false
+ 
+ 
 
 test:
   stage: test
   script:
     - echo "Starting test..."
     - apk add --no-cache gcc python3-dev musl-dev linux-headers make 
+    - python3 -m ensurepip  # Installe pip si ce n'est pas déjà fait
+    - python3 -m pip install --upgrade pip  # Met à jour pip
     - pip install -r requirements.dev.txt
     - apk add --no-cache make
     - make environment
     - make test 
 
+  
 coverage:
   stage: coverage
   script:
-    - apk add --no-cache gcc python3-dev musl-dev linux-headers
-    - pip install pytest-cov
-    - pip install -r requirements.dev.txt
-    - pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc --cov-fail-under=82.71
+   - apk add --no-cache gcc python3-dev musl-dev linux-headers
+   - pip install pytest-cov
+   - pip install -r requirements.dev.txt
+   - pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc --cov-fail-under=82.71
   artifacts:
     paths: 
       - coverage.xml
 
-image: docker:19.03.12  # Utilisation de l'image Docker pour l'étape de build
+
+
+image: docker:19.03.12
 
 variables:
   CI_REGISTRY_IMAGE: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8
@@ -60,6 +64,10 @@ services:
     entrypoint: ["env", "-u", "DOCKER_HOST"]
     command: ["dockerd-entrypoint.sh"]
 
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+
 build:
   stage: build
   script:
@@ -69,10 +77,12 @@ build:
     - docker push "$CI_REGISTRY_IMAGE:latest"
     - docker push "$CI_REGISTRY_IMAGE:$DATEPRECISE"
 
+
 deploy:
   stage: deploy
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:latest"  # Assurez-vous de prendre la version la plus récente
-    - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:latest"  # Utilisez "latest" pour le déploiement
+    - docker pull "$CI_REGISTRY_IMAGE:main"
+    - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
   only:
     - main
+ 
