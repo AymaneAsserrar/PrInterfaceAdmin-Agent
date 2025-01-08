@@ -2,8 +2,7 @@ stages:
   - test
   - lint
   - coverage
-  - build 
-  - deploy
+  - build_and_deploy
 
 
 default:
@@ -62,8 +61,8 @@ services:
     command: ["dockerd-entrypoint.sh"]
 
 
-build:
-  stage: build
+build_and_deploy:
+  stage: build_and_deploy
   image: docker:19.03.12
   before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -73,12 +72,6 @@ build:
     - docker tag "$CI_REGISTRY_IMAGE:latest" "$CI_REGISTRY_IMAGE:$DATEPRECISE"
     - docker push "$CI_REGISTRY_IMAGE:latest"
     - docker push "$CI_REGISTRY_IMAGE:$DATEPRECISE"
-
-
-deploy:
-  stage: deploy
-  image: docker:19.03.12
-  script:
     - docker pull "$CI_REGISTRY_IMAGE:main"
     - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
   only:
