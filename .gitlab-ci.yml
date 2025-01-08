@@ -36,7 +36,7 @@ coverage:
    - pip install -r requirements.dev.txt
    - pip install -r requirements.txt
    - pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc --cov-fail-under=82.71
-  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+)%/'
+  coverage: `/TOTAL.*? (100(?:.0+)?%
   artifacts:
     paths: 
       - coverage.xml
