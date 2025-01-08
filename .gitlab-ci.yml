@@ -54,8 +54,8 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
-  CI_REGISTRY_USER: 
-  CI_REGISTRY_PASSWORD:  
+  CI_REGISTRY_USER: TokenDockerAgent 
+  CI_REGISTRY_PASSWORD: glpat-RKs7JCFTd8Tr8KsHPcxf
 
 services:
   - name: docker:dind
