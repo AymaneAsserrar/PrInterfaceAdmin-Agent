@@ -3,8 +3,7 @@ stages:
   - test
   - lint
   - coverage
-  - build
-  - test 
+  - build 
   - deploy
 
 
