@@ -81,7 +81,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:main"''
+    - docker pull "$CI_REGISTRY_IMAGE:main"
     - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
   only:
     - main
