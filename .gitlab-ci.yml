@@ -29,7 +29,8 @@ test:
   script:
     - echo "Starting test..."
     - apk add --no-cache gcc python3-dev musl-dev linux-headers make 
-    - python3 -m ensurepip
+    - python3 -m ensurepip  # Installe pip si ce n'est pas déjà fait
+    - python3 -m pip install --upgrade pip  # Met à jour pip
     - pip install -r requirements.dev.txt
     - apk add --no-cache make
     - make environment
