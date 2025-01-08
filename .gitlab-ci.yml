@@ -29,8 +29,8 @@ test:
   script:
     - echo "Starting test..."
     - apk add --no-cache gcc python3-dev musl-dev linux-headers make 
+    - python3 -m ensurepip
     - pip install -r requirements.dev.txt
-    - pip install -r requirements.txt
     - apk add --no-cache make
     - make environment
     - make test 
@@ -82,7 +82,7 @@ deploy:
   stage: deploy
   script:
     - docker pull "$CI_REGISTRY_IMAGE:main"
-    - docker run -d --name project-container -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
+    - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
   only:
     - main
  
