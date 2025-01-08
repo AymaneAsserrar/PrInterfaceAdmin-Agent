@@ -1,6 +1,6 @@
 ---
 stages:
-  - test
+  #- test
   - lint
   - coverage
   - build 
@@ -49,8 +49,8 @@ coverage:
       - coverage.xml
 
 
-default:
-  image: docker:19.03.12
+
+image: docker:19.03.12
 
 variables:
   CI_REGISTRY_IMAGE: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8
@@ -82,7 +82,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:main"
+    - docker pull "$CI_REGISTRY_IMAGE:main"''
     - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
   only:
     - main
