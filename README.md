@@ -35,4 +35,4 @@ Application is running 2 threads, one for the API to expose metrics and one for 
 ## Badges
 ![Coverage](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/add-branch-coverage/coverage.svg)
 
-![Pipeline](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/add-branch-coverage/pipeline.svg)
+[![pipeline status](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/add-badge-coverage/pipeline.svg)]
