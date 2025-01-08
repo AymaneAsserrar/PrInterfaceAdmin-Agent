@@ -33,6 +33,6 @@ Run project with `make debug` and consult url in log for api doc at `/docs` or `
 
 Application is running 2 threads, one for the API to expose metrics and one for collecting metrics.
 ## Badges
-![Coverage](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/add-branch-coverage/coverage.svg?job=coverage)
+![Coverage](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/add-branch-coverage/coverage.svg)
 
 ![Pipeline](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/add-branch-coverage/pipeline.svg)
