@@ -49,7 +49,6 @@ coverage:
 
 
 
-image: docker:19.03.12
 
 variables:
   CI_REGISTRY_IMAGE: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8
@@ -70,6 +69,7 @@ before_script:
 
 build:
   stage: build
+  image: docker:19.03.12
   script:
     - DATEPRECISE=$(date +"%Y%m%d-%H%M%S")
     - docker build --pull -t "$CI_REGISTRY_IMAGE:latest" .
@@ -80,6 +80,7 @@ build:
 
 deploy:
   stage: deploy
+  image: docker:19.03.12
   script:
     - docker pull "$CI_REGISTRY_IMAGE:main"
     - docker run -d --name latest -p 8080:8080 "$CI_REGISTRY_IMAGE:main"
