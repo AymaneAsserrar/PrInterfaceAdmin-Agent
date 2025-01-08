@@ -1,6 +1,6 @@
 ---
 stages:
-  #- test
+  - test
   - lint
   - coverage
   - build 
@@ -8,7 +8,7 @@ stages:
 
 
 default:
-  image: python:3.8-alpine
+  image: python:3.12-alpine
 
 
 
