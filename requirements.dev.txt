@@ -1,8 +1,8 @@
-fastapi
-uvicorn
-click
+pylint 
 pytest
 httpx
 psutil
 pytest-cov
-apache-log-parser
+coverage
+flake8
+fastapi

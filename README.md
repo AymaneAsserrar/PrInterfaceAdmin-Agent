@@ -32,3 +32,8 @@ prod : no hot reload
 Run project with `make debug` and consult url in log for api doc at `/docs` or `/redoc`.
 
 Application is running 2 threads, one for the API to expose metrics and one for collecting metrics.
+## Badges
+
+![pipeline status](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/pipeline.svg)
+
+![coverage report](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/coverage.svg)
