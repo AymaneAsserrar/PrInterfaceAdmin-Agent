@@ -1,4 +1,4 @@
-# **ia-groupe-8 Monitoring Agent**
+# **Monitoring Agent ia-groupe-8**
 
 ## About the project
 
@@ -20,7 +20,7 @@ Before you continue, ensure you have met the following requirements:
 
 - **Clone the project**:
 ```sh
-  git@devops.telecomste.fr:printerfaceadmin/2024-25/group8/ia-groupe-8.git
+  git clone git@devops.telecomste.fr:printerfaceadmin/2024-25/group8/ia-groupe-8.git
   cd ia-groupe-8
 ```
 
@@ -47,6 +47,10 @@ Before you continue, ensure you have met the following requirements:
   make debug
 ```
 
+- **Exit the application**:
+```sh
+  ctrl + C
+```
 ## Badges
 
 ![pipeline status](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/pipeline.svg)
@@ -56,7 +60,7 @@ Before you continue, ensure you have met the following requirements:
 
 - **Clone the project**:
 ```sh
-  git@devops.telecomste.fr:printerfaceadmin/2024-25/group8/ia-groupe-8.git
+  git clone git@devops.telecomste.fr:printerfaceadmin/2024-25/group8/ia-groupe-8.git
   cd ia-groupe-8
 ```
 
@@ -75,11 +79,11 @@ Push your changes, describe what you did, and open a merge request with a nice d
 ## Contributors
 
 We wouldn’t be here without the contributions of these brilliant minds:
--ASSERAR Aymane
--EL-KOULFA Hassane
--GOUHIER Matteo
--HARGANE Chayma
--TIDJANI MOHAMED Archou
+-ASSERAR Aymane  
+-EL-KOULFA Hassane  
+-GOUHIER Matteo  
+-HARGANE Chayma  
+-TIDJANI MOHAMED Archou  
 
 Want to see your name here? Check out the section above to learn how to contribute!
 
@@ -87,4 +91,4 @@ Want to see your name here? Check out the section above to learn how to contribu
 
 Special thanks to:
 
-Mehdi Zeghdallou, Damien Jacinto, and Jules Chevalier: Our three professors who showed incredible patience and support throughout this project.
+Mehdi Zeghdallou, Damien Jacinto and Jules Chevalier: Our three professors who showed incredible patience and support throughout this project.
