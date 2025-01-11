@@ -1,28 +1,14 @@
 """
 This module defines a data transfer model for a GetCpuResponseSchema.
 """
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 
 class GetCpuResponseSchema(BaseModel):
-    """
-    Pydantic data model for the response schema representing CPU information.
-
-    Attributes:
-        id (int): The ID of the CPU data.
-        usage (str): The CPU usage in string format.
-    """
-
-    id: int
-    usage: str
-
+    core: int = Field(..., ge=0)
+    usage: float = Field(..., ge=0, le=100)
 
 class GetCpuCoreResponseSchema(BaseModel):
-    """
-    Pydantic data model for the response schema representing CPU core number.
+    number: int = Field(..., gt=0)
 
-    Attributes:
-        number (int): CPU core number.
-    """
-
-    number: int
+class ExceptionResponseSchema(BaseModel):
+    detail: str
