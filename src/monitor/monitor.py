@@ -3,29 +3,18 @@ import time
 import psutil
 from typing import List
 
-
 class MonitorTask:
     """A class for monitoring metrics."""
-
-    interval: int
-    cpu_percent: List[float]
-    num_cores: int
-    ram_percent: float
-    total_ram: float
-    available_ram: float
-    used_ram: float
-    free_ram: float
-
-
-
 
     def __init__(self) -> None:
         """Initialize the MonitorTask class."""
         self.interval = 3
         self.num_cores = psutil.cpu_count(logical=False)
-        self.cpu_percent = [0] * self.num_cores
+        # Initialize with actual CPU percentages instead of zeros
+        self.cpu_percent = psutil.cpu_percent(percpu=True, interval=1)
         self.ram_percent = 0
-        # Initialiser les valeurs RAM directement lors de l'initialisation
+        
+        # Initialize RAM values
         ram = psutil.virtual_memory()
         self.total_ram = ram.total / (1024 * 1024)
         self.available_ram = ram.available / (1024 * 1024)
@@ -44,6 +33,7 @@ class MonitorTask:
     def monitor(self):
         """Continuously monitor and store the result in an attribute."""
         while True:
-            self.cpu_percent = psutil.cpu_percent(percpu=True)
+            # Get per-CPU percentages with a small interval for accurate first reading
+            self.cpu_percent = psutil.cpu_percent(percpu=True, interval=0.1)
             self._update_ram_metrics()
-            time.sleep(self.interval)
+            time.sleep(self.interval - 0.1)  # Adjust sleep time to account for the interval
