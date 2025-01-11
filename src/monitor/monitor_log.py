@@ -26,4 +26,4 @@ current_dir = os.path.dirname(__file__)
 log_path = os.path.join(current_dir, "../tests/tst_log.log")  
 
 test ='127.0.0.1 - - [09/Jan/2020:10:35:48 +0000] "GET / HTTP/1.1" 200 11229 "-" "Wget/1.19.4 (linux-gnu)"'
-parser(log_path) 
+parser(log_path)
