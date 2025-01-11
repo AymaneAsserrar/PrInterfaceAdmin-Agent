@@ -6,15 +6,12 @@ stages:
 
 
 default:
-  image: python:3.12-alpine
+  image: devops.telecomste.fr:5050/printerfaceadmin/2024-25/group8/ia-groupe-8:tooling
 
 
 
 lint:
   stage: lint
-  before_script:
-    - apk add --no-cache gcc python3-dev musl-dev linux-headers jq
-    - pip install -r requirements.dev.txt
   script:
     - pylint src/ --disable=R0011,W292,C0301 --fail-under=7.6
   allow_failure: false
@@ -25,8 +22,6 @@ test:
   stage: test
   script:
     - echo "Starting test..."
-    - apk add --no-cache gcc python3-dev musl-dev linux-headers make 
-    - pip install -r requirements.dev.txt
     - pip install -r requirements.txt
     - apk add --no-cache make
     - make environment
@@ -36,8 +31,6 @@ test:
 coverage:
   stage: coverage
   script:
-   - apk add --no-cache gcc python3-dev musl-dev linux-headers
-   - pip install -r requirements.dev.txt
    - pip install -r requirements.txt
    - pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc --cov-fail-under=82.71
   coverage: /TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
@@ -61,6 +54,7 @@ services:
   - name: docker:dind
     entrypoint: ["env", "-u", "DOCKER_HOST"]
     command: ["dockerd-entrypoint.sh"]
+
 
 
 build_and_deploy:
