@@ -2,3 +2,4 @@ uvicorn
 click
 psutil
 apache_log_parser
+fastapi
