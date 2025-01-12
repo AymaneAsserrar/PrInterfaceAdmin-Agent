@@ -5,7 +5,6 @@ This module contains test cases for the monitoring API endpoints,
 including CPU usage, RAM information, and log parsing functionality.
 """
 
-import datetime
 import threading
 from typing import List, Dict, Union
 
@@ -17,6 +16,9 @@ from monitor import MonitorTask
 from monitor.monitor_log import parse_log_line, parse_log_file
 
 from server import app
+
+from pathlib import Path
+from datetime import datetime
 
 
 class MonitorTaskFake(MonitorTask):
