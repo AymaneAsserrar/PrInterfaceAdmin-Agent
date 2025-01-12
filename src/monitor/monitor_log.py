@@ -1,6 +1,7 @@
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Union
 from datetime import datetime
+import apache_log_parser
 
 def parse_log_line(line: str) -> Dict[str, Union[str, datetime]]:
     """

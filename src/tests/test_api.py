@@ -7,7 +7,8 @@ including CPU usage, RAM information, and log parsing functionality.
 
 import datetime
 import threading
-from typing import List
+from typing import List, Dict, Union
+
 
 import pytest
 from fastapi.testclient import TestClient
