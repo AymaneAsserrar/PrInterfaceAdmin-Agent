@@ -53,6 +53,9 @@ Before you continue, ensure you have met the following requirements:
 ```
 ## Badges
 
+You will find below the badges for the pipeline status and the test coverage, providing insights into the project's build health and code quality.
+
+
 ![pipeline status](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/pipeline.svg)
 ![coverage report](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/coverage.svg)
 
@@ -78,7 +81,7 @@ Push your changes, describe what you did, and open a merge request with a nice d
 
 ## Contributors
 
-We wouldn’t be here without the contributions of these brilliant minds:
+We wouldn’t be here without the contributions of these brilliant minds:  
 -ASSERAR Aymane  
 -EL-KOULFA Hassane  
 -GOUHIER Matteo  
@@ -92,3 +95,9 @@ Want to see your name here? Check out the section above to learn how to contribu
 Special thanks to:
 
 Mehdi Zeghdallou, Damien Jacinto and Jules Chevalier: Our three professors who showed incredible patience and support throughout this project.
+
+## License
+
+No specific license has been assigned to this project.
+For questions regarding usage or rights, please contact the authors.
+
