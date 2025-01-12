@@ -13,7 +13,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 from monitor import MonitorTask
-from monitor.monitor_log import parser_ligne, parser
+from monitor.monitor_log import parse_log_line, parse_log_file
+
 from server import app
 
 
@@ -121,58 +122,119 @@ def test_get_ram_info():
         # Restore original monitor task
         app.state.monitortask = save_app
 
+@pytest.fixture
+def valid_log_line() -> str:
+    return '192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326'
 
-def test_parser_ligne_simple():
-    """Test parsing a single line of log data."""
-    log = ('192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] "GET / HTTP/1.1" '
-           '200 1245 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"')
-    resultat_attendu = [
-        '192.168.1.10',
-        '-',
-        '200',
-        '/',
-        datetime.datetime(2020, 1, 1, 8, 12, 14)
-    ]
-    resultat = parser_ligne(log)
-    assert resultat == resultat_attendu, f"Erreur : {resultat} != {resultat_attendu}"
+@pytest.fixture
+def valid_log_file(tmp_path) -> Path:
+    content = """192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326
+192.168.1.2 - - [10/Jan/2024:13:56:36 +0000] "POST /api/data HTTP/1.1" 201 532
+192.168.1.1 - admin [10/Jan/2024:13:57:36 +0000] "GET /about.html HTTP/1.1" 404 1234"""
+    
+    log_file = tmp_path / "test.log"
+    log_file.write_text(content)
+    return log_file
 
+@pytest.fixture
+def expected_parsed_line() -> Dict[str, Union[str, datetime]]:
+    return {
+        'remote_host': '192.168.1.1',
+        'remote_user': 'admin',
+        'status': '200',
+        'request_url': '/index.html',
+        'timestamp': datetime(2024, 1, 10, 13, 55, 36)
+    }
 
-def test_parser_simple(tmp_path):
-    """Test parsing multiple lines of valid log data."""
-    logs = [
-        ('192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] "GET / HTTP/1.1" '
-         '200 1245 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"'),
-        ('192.168.1.11 - - [01/Jan/2020:08:15:00 +0000] "POST /login HTTP/1.1" '
-         '302 512 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"'),
-        ('192.168.1.12 - - [01/Jan/2020:08:18:00 +0000] "GET /notfound HTTP/1.1" '
-         '404 178 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"')
-    ]
-    log_file = tmp_path / "test_logs.log"
-    log_file.write_text("\n".join(logs))
+class TestParseLogLine:
+    def test_valid_line(self, valid_log_line, expected_parsed_line):
+        """Test parsing a valid log line."""
+        result = parse_log_line(valid_log_line)
+        assert result == expected_parsed_line
 
-    resultat_attendu = [
-        ['192.168.1.10', '-', '200', '/', datetime.datetime(2020, 1, 1, 8, 12, 14)],
-        ['192.168.1.11', '-', '302', '/login', datetime.datetime(2020, 1, 1, 8, 15, 0)],
-        ['192.168.1.12', '-', '404', '/notfound', datetime.datetime(2020, 1, 1, 8, 18, 0)]
-    ]
+    def test_empty_line(self):
+        """Test parsing an empty line raises ValueError."""
+        with pytest.raises(ValueError):
+            parse_log_line("")
 
-    resultats = []
-    with open(log_file, 'r', encoding='utf-8') as fichier:
-        for ligne in fichier:
-            resultats.append(parser_ligne(ligne.strip()))
+    def test_malformed_line(self):
+        """Test parsing a malformed log line raises ValueError."""
+        malformed_lines = [
+            "Invalid log line",
+            "192.168.1.1 - admin [invalid_date] GET /index.html HTTP/1.1 200",
+            "192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] Invalid Request 200"
+        ]
+        for line in malformed_lines:
+            with pytest.raises(ValueError):
+                parse_log_line(line)
 
-    assert resultats == resultat_attendu, f"Erreur : {resultats} != {resultat_attendu}"
+    def test_different_user_values(self):
+        """Test parsing lines with different user values."""
+        lines = {
+            '192.168.1.1 - - [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326': '-',
+            '192.168.1.1 - john [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326': 'john'
+        }
+        for line, expected_user in lines.items():
+            result = parse_log_line(line)
+            assert result['remote_user'] == expected_user
 
+    def test_different_status_codes(self):
+        """Test parsing lines with different HTTP status codes."""
+        status_codes = ['200', '404', '500', '301']
+        for status in status_codes:
+            line = f'192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" {status} 2326'
+            result = parse_log_line(line)
+            assert result['status'] == status
 
-def test_parser_simple_invalid(tmp_path):
-    """Test parsing invalid log data raises appropriate exceptions."""
-    logs_invalides = [
-        "192.168.1.10 - - [01/Jan/2020:08:12:14 +0000] GET / HTTP/1.1",
-        "192.168.1.11 - - [01/Jan/2020:08:15:00 +0000] 302",
-        "INVALID LOG LINE"
-    ]
-    log_file = tmp_path / "test_logs_invalid.log"
-    log_file.write_text("\n".join(logs_invalides))
+class TestParseLogFile:
+    def test_valid_file(self, valid_log_file):
+        """Test parsing a valid log file."""
+        results = parse_log_file(valid_log_file)
+        assert len(results) == 3
+        assert all(isinstance(r, dict) for r in results)
+        assert all(isinstance(r['timestamp'], datetime) for r in results)
 
-    with pytest.raises(Exception):
-        parser(str(log_file))
+    def test_nonexistent_file(self):
+        """Test parsing a non-existent file raises FileNotFoundError."""
+        with pytest.raises(FileNotFoundError):
+            parse_log_file(Path('nonexistent.log'))
+
+    def test_empty_file(self, tmp_path):
+        """Test parsing an empty file returns empty list."""
+        empty_file = tmp_path / "empty.log"
+        empty_file.write_text("")
+        results = parse_log_file(empty_file)
+        assert results == []
+
+    def test_file_with_empty_lines(self, tmp_path):
+        """Test parsing a file with empty lines."""
+        content = """
+192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326
+
+192.168.1.2 - - [10/Jan/2024:13:56:36 +0000] "POST /api/data HTTP/1.1" 201 532
+
+"""
+        log_file = tmp_path / "test_empty_lines.log"
+        log_file.write_text(content)
+        results = parse_log_file(log_file)
+        assert len(results) == 2
+
+    def test_file_with_invalid_lines(self, tmp_path):
+        """Test parsing a file with some invalid lines raises ValueError."""
+        content = """192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326
+Invalid Line
+192.168.1.2 - - [10/Jan/2024:13:56:36 +0000] "POST /api/data HTTP/1.1" 201 532"""
+        
+        log_file = tmp_path / "test_invalid.log"
+        log_file.write_text(content)
+        with pytest.raises(ValueError):
+            parse_log_file(log_file)
+
+    @pytest.mark.parametrize("encoding", ["utf-8", "ascii", "latin-1"])
+    def test_different_file_encodings(self, tmp_path, encoding):
+        """Test parsing files with different encodings."""
+        content = '192.168.1.1 - admin [10/Jan/2024:13:55:36 +0000] "GET /index.html HTTP/1.1" 200 2326'
+        log_file = tmp_path / f"test_{encoding}.log"
+        log_file.write_text(content, encoding=encoding)
+        results = parse_log_file(log_file)
+        assert len(results) == 1
