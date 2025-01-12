@@ -1,66 +1,54 @@
-"""
-Module for parsing and analyzing Apache web server log files.
-
-This module provides functionality to read and parse Apache log files,
-extracting relevant information such as remote host, user, status code,
-and request details.
-"""
-
-import os
-from typing import List, Union
+from pathlib import Path
+from typing import List, Dict, Union
+from datetime import datetime
 import apache_log_parser
 
-
-def parser_ligne(ligne: str) -> List[Union[str, str]]:
+def parse_log_line(line: str) -> Dict[str, Union[str, datetime]]:
     """
-    Parse a single line from an Apache log file.
-
+    Parse a single Apache log line.
+    
     Args:
-        ligne (str): A single line from the log file to parse
-
+        line: Raw log line string
+        
     Returns:
-        List[Union[str, str]]: Contains extracted log information:
-            - remote_host: IP address of the client
-            - remote_user: Username of the client
-            - status: HTTP status code
-            - request_url: Requested URL
-            - timestamp: Time of the request
-    """
-    line_parser = apache_log_parser.make_parser("%h %l %u %t \"%r\" %>s %b")
-    log_parsed = line_parser(ligne)
-    return [
-        log_parsed['remote_host'],
-        log_parsed['remote_user'],
-        log_parsed['status'],
-        log_parsed['request_url'],
-        log_parsed['time_received_datetimeobj']
-    ]
-
-
-def parser(chemin: str) -> None:
-    """
-    Parse an entire log file and process each line.
-
-    Args:
-        chemin (str): Path to the log file to parse
-
+        Dict containing parsed log fields
+        
     Raises:
-        FileNotFoundError: If the specified log file is not found
-        Exception: If there's an error parsing the log file
+        ValueError: If line format is invalid
     """
-    with open(chemin, 'r', encoding='utf-8') as fichier:
-        for ligne in fichier:
-            resultat = parser_ligne(ligne.strip())
-            print(resultat)
+    try:
+        line_parser = apache_log_parser.make_parser("%h %l %u %t \"%r\" %>s %b")
+        parsed = line_parser(line)
+        return {
+            'remote_host': parsed['remote_host'],
+            'remote_user': parsed['remote_user'],
+            'status': parsed['status'],
+            'request_url': parsed['request_url'],
+            'timestamp': parsed['time_received_datetimeobj']
+        }
+    except Exception as e:
+        raise ValueError(f"Invalid log line format: {str(e)}")
 
-
-# Get current directory and construct log file path
-CURRENT_DIR = os.path.dirname(__file__)
-LOG_PATH = os.path.join(CURRENT_DIR, "../tests/tst_log.log")
-
-# Example log entry for testing
-EXAMPLE_LOG = ('127.0.0.1 - - [09/Jan/2020:10:35:48 +0000] '
-               '"GET / HTTP/1.1" 200 11229 "-" "Wget/1.19.4 (linux-gnu)"')
-
-if __name__ == "__main__":
-    parser(LOG_PATH)
+def parse_log_file(path: Path) -> List[Dict[str, Union[str, datetime]]]:
+    """
+    Parse entire Apache log file.
+    
+    Args:
+        path: Path to log file
+        
+    Returns:
+        List of parsed log entries
+        
+    Raises:
+        FileNotFoundError: If file doesn't exist
+        IOError: If file can't be read
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"Log file not found: {path}")
+        
+    results = []
+    with path.open('r', encoding='utf-8') as f:
+        for line in f:
+            if line.strip():
+                results.append(parse_log_line(line.strip()))
+    return results

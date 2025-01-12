@@ -10,6 +10,9 @@ RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev python3-dev
 
 WORKDIR /app
 
+RUN mkdir -p /logs
+
+
 COPY requirements.txt /app/requirements.txt
 
 
