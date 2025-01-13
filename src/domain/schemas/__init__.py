@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from .cpu import GetCpuResponseSchema, GetCpuCoreResponseSchema
 from .ram import GetRamResponseSchema, GetRamInfoResponseSchema
-
+from .logs import LogEntrySchema, LogMetricsSchema
 
 class ExceptionResponseSchema(BaseModel):
     error: str
@@ -10,7 +10,9 @@ class ExceptionResponseSchema(BaseModel):
 __all__ = [
     "GetCpuResponseSchema",
     "GetCpuCoreResponseSchema",
-    "GetRamResponseSchema", 
+    "GetRamResponseSchema",
     "GetRamInfoResponseSchema",
+    "LogEntrySchema",
+    "LogMetricsSchema",
     "ExceptionResponseSchema",
 ]
