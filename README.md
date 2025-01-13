@@ -53,11 +53,12 @@ Before you continue, ensure you have met the following requirements:
 ```
 ## Badges
 
-You will find below the badges for the pipeline status and the test coverage, providing insights into the project's build health and code quality.
+You will find below the badges for the pipeline status, the test coverage and the test lint, providing insights into the project's build health and code quality.
 
 
 ![pipeline status](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/pipeline.svg)
 ![coverage report](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/badges/main/coverage.svg)
+![Pylint Score](https://devops.telecomste.fr/printerfaceadmin/2024-25/group8/ia-groupe-8/-/jobs/69554/artifacts/raw/pylint-score.svg)
 
 ## How to contribute to the project
 
