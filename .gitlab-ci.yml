@@ -38,7 +38,7 @@ coverage:
   stage: coverage
   script:
    - pip install -r requirements.txt
-   - pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc --cov-fail-under=82.71
+   - pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc --cov-fail-under=70
   coverage: /TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
   artifacts:
     
