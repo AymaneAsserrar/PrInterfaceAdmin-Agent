@@ -16,9 +16,9 @@ class LogService:
         self.line_parser = apache_log_parser.make_parser(
             "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
         )
-        # Use Apache2 log paths
-        self.access_log_path = "/var/log/apache2/access.log"
-        self.error_log_path = "/var/log/apache2/error.log"
+        # Use environment variables for log paths with defaults
+        self.access_log_path = os.getenv('ACCESS_LOG_PATH', '/var/log/apache2/access.log')
+        self.error_log_path = os.getenv('ERROR_LOG_PATH', '/var/log/apache2/error.log')
 
     def parse_log_entry(self, line: str) -> LogEntrySchema:
         """

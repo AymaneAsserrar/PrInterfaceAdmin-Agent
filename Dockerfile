@@ -1,7 +1,9 @@
 FROM python:3.12-alpine
 
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    ACCESS_LOG_PATH=/logs/access.log \
+    ERROR_LOG_PATH=/logs/error.log
 
 # Installation des dépendances système
 RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev python3-dev
