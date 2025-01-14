@@ -1,6 +1,3 @@
-"""
-This module provides services for analyzing log data.
-"""
 import os
 from typing import List, Dict
 from collections import Counter
@@ -8,15 +5,16 @@ from datetime import datetime
 import apache_log_parser
 from domain.schemas import LogEntrySchema, LogMetricsSchema
 
-
 class LogService:
     """Service for analyzing log data."""
-
+    
     def __init__(self):
         """Initialize the log service with parser."""
         self.line_parser = apache_log_parser.make_parser(
             "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
         )
+        # Use environment variable for log path, with fallback
+        self.log_path = os.getenv('LOG_FILE_PATH', '/app/logs/access.log')
 
     def parse_log_entry(self, line: str) -> LogEntrySchema:
         """
@@ -52,12 +50,20 @@ class LogService:
         status_counter = Counter()
         url_counter = Counter()
 
-        # Get path to log file
-        current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        log_path = os.path.join(current_dir, "tests", "tst_log.log")
-
         try:
-            with open(log_path, "r", encoding="utf-8") as file:
+            # Check if log file exists
+            if not os.path.exists(self.log_path):
+                print(f"Log file not found at {self.log_path}")
+                return LogMetricsSchema(
+                    total_requests=0,
+                    success_count=0,
+                    error_count=0,
+                    status_codes={},
+                    top_urls=[],
+                    recent_errors=[]
+                )
+
+            with open(self.log_path, "r", encoding="utf-8") as file:
                 for line in file:
                     try:
                         entry = self.parse_log_entry(line.strip())
