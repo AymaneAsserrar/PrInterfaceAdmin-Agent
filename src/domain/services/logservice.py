@@ -1,3 +1,6 @@
+"""
+This module provides services for analyzing log data.
+"""
 import os
 from typing import List, Dict
 from collections import Counter
@@ -13,8 +16,9 @@ class LogService:
         self.line_parser = apache_log_parser.make_parser(
             "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
         )
-        # Use environment variable for log path, with fallback
-        self.log_path = os.getenv('LOG_FILE_PATH', '/app/logs/access.log')
+        # Use Apache2 log paths
+        self.access_log_path = "/var/log/apache2/access.log"
+        self.error_log_path = "/var/log/apache2/error.log"
 
     def parse_log_entry(self, line: str) -> LogEntrySchema:
         """
@@ -51,9 +55,9 @@ class LogService:
         url_counter = Counter()
 
         try:
-            # Check if log file exists
-            if not os.path.exists(self.log_path):
-                print(f"Log file not found at {self.log_path}")
+            # Check if access log file exists
+            if not os.path.exists(self.access_log_path):
+                print(f"Access log file not found at {self.access_log_path}")
                 return LogMetricsSchema(
                     total_requests=0,
                     success_count=0,
@@ -63,7 +67,7 @@ class LogService:
                     recent_errors=[]
                 )
 
-            with open(self.log_path, "r", encoding="utf-8") as file:
+            with open(self.access_log_path, "r", encoding="utf-8") as file:
                 for line in file:
                     try:
                         entry = self.parse_log_entry(line.strip())
